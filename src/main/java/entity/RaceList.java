@@ -24,4 +24,7 @@ public class RaceList {
 
     @Column(name = "race_id")
     private Race race;
+
+    @Column(name = "is_chosen")
+    private boolean isChosen;
 }

@@ -33,53 +33,61 @@ public class RaceUtils {
     public static Race startNewRace(Horse chosenHorse) {
         Race race = new Race();
         race.setDate(LocalDate.now());
-        race.setChosenHorse(chosenHorse);
         List<Horse> horseList = horseDao.readAll();
         horseCount = horseList.size();
-        List<Horse>results = new ArrayList<>();
-        startHorseRun(horseList,results);
+        List<Horse> results = new ArrayList<>();
+        startHorseRun(horseList, results);
         raceDao.create(race);
-        saveRunData(race,results);
+        saveRunData(race, results, chosenHorse);
         return race;
     }
-    private static void saveRunData(Race race, List<Horse> results){
+
+    private static void saveRunData(Race race, List<Horse> results, Horse chosen) {
         int horsePos = 0;
         RaceList list;
-        for (Horse horse:results) {
+        for (Horse horse : results) {
             list = new RaceList();
             list.setHorse(horse);
+            list.setChosen(horse.getId() == chosen.getId());
             list.setPosition(++horsePos);
             list.setRace(race);
             raceListDao.create(list);
         }
     }
 
-    private static void  startHorseRun( List<Horse> horses, List<Horse> results) {
+    private static void startHorseRun(List<Horse> horses, List<Horse> results) {
         ExecutorService executor = Executors.newCachedThreadPool();
         CountDownLatch latch = new CountDownLatch(horses.size());
-        Runnable r = ()-> {
+        Runnable r = () -> {
             Horse horse = horses.get(--horseCount);
             boolean isFinished = false;
             int distanceLeft = DISTANCE;
             while (!isFinished) {
-            distanceLeft-= random.nextInt(STEP_RANGE)+MIN_STEP;
-                if(distanceLeft>0) {
+                distanceLeft -= random.nextInt(STEP_RANGE) + MIN_STEP;
+                if (distanceLeft > 0) {
                     try {
                         Thread.sleep(random.nextInt(SLEEP_RANGE) + MIN_SLEEP_TIME);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     results.add(horse);
-                    isFinished=true;
+                    isFinished = true;
                 }
             }
             latch.countDown();
 
         };
-        for (int i=0;i<horses.size();i++){
+        for (int i = 0; i < horses.size(); i++) {
             executor.execute(r);
         }
+    }
+
+    public static List<RaceList> getRace(int id) {
+        List<RaceList> list = new ArrayList<>();
+        list = raceListDao.getRaceInfo(id);
+
+        return list;
     }
 
 

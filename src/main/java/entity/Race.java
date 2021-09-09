@@ -17,8 +17,6 @@ public class Race {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    @Column(name = "chosen_horse_Id")
-    private Horse chosenHorse;
     @Column(name = "data")
     private LocalDate date;
 
