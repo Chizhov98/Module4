@@ -2,12 +2,12 @@ package dao;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import utils.HibernateUtils;
+import utils.HibernateUtil;
 
 public abstract class DefaultDao {
     public <T> void create(T entity) {
         Transaction transaction = null;
-        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.save(entity);
 
@@ -22,7 +22,7 @@ public abstract class DefaultDao {
 
     public <T> void update(T entity) {
         Transaction transaction = null;
-        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
             session.update(entity);

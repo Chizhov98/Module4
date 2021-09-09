@@ -4,7 +4,7 @@ import entity.Horse;
 import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import utils.HibernateUtils;
+import utils.HibernateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 public class HorseDao extends DefaultDao {
     public void delete(int id) {
         Transaction transaction = null;
-        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
             Horse horse = session.get(Horse.class, id);
@@ -31,7 +31,7 @@ public class HorseDao extends DefaultDao {
     public Horse read(int id) {
         Horse horse = null;
         Transaction transaction = null;
-        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
             horse = session.get(Horse.class, id);
@@ -44,10 +44,11 @@ public class HorseDao extends DefaultDao {
         }
         return horse;
     }
-    public List<Horse> readAll(){
+
+    public List<Horse> readAll() {
         List<Horse> horses = new ArrayList<>();
         Transaction transaction = null;
-        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             String hql = "FROM Horse";
             Query query = session.createQuery(hql);

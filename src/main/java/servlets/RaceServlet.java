@@ -13,16 +13,13 @@ import java.io.PrintWriter;
 import java.util.List;
 
 public class RaceServlet extends HttpServlet {
-
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         PrintWriter responseBody = resp.getWriter();
         String path = req.getPathInfo();
-        System.out.println("doGet");
         String teg;
         if (path.matches("/\\d+")) {
-            var id = Integer.parseInt(path.substring(1));
+            int id = Integer.parseInt(path.substring(1));
             List<RaceList> race = RaceUtils.getRace(id);
             if (race == null) {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND);

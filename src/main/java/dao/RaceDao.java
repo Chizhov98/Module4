@@ -1,16 +1,15 @@
 package dao;
 
-import entity.Horse;
 import entity.Race;
-import entity.RaceList;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import utils.HibernateUtils;
+import org.hibernate.query.Query;
+import utils.HibernateUtil;
 
-public class RaceDao extends DefaultDao{
+public class RaceDao extends DefaultDao {
     public void delete(int id) {
         Transaction transaction = null;
-        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
             Race race = session.get(Race.class, id);
@@ -29,7 +28,7 @@ public class RaceDao extends DefaultDao{
     public Race read(int id) {
         Race race = null;
         Transaction transaction = null;
-        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
             race = session.get(Race.class, id);
@@ -42,4 +41,23 @@ public class RaceDao extends DefaultDao{
         }
         return race;
     }
+
+    public int getRaceCount() {
+        Transaction transaction = null;
+        int count = 0;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            String hql = "SELECT COUNT(id) FROM Race";
+            Query query = session.createQuery(hql);
+            count = (int) query.list().get(0);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return count;
+    }
+
 }

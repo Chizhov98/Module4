@@ -17,5 +17,4 @@ public class Horse {
 
     @Column(name = "name")
     private String name;
-
 }

@@ -4,6 +4,7 @@ import dao.HorseDao;
 import dao.RaceDao;
 import dao.RaceListDao;
 import entity.Horse;
+import entity.ProfileInfo;
 import entity.Race;
 import entity.RaceList;
 
@@ -15,7 +16,6 @@ import java.util.concurrent.Executors;
 
 import java.time.LocalDate;
 import java.util.List;
-
 
 public class RaceUtils {
     private static final HorseDao horseDao = new HorseDao();
@@ -30,7 +30,8 @@ public class RaceUtils {
     private static final int MIN_SLEEP_TIME = 400;
     private static final int SLEEP_RANGE = 100;
 
-    public static Race startNewRace(Horse chosenHorse) {
+    public static boolean startNewRace(int chosenHorseId) {
+        Horse chosenHorse = horseDao.read(chosenHorseId);
         Race race = new Race();
         race.setDate(LocalDate.now());
         List<Horse> horseList = horseDao.readAll();
@@ -39,7 +40,7 @@ public class RaceUtils {
         startHorseRun(horseList, results);
         raceDao.create(race);
         saveRunData(race, results, chosenHorse);
-        return race;
+        return true;
     }
 
     private static void saveRunData(Race race, List<Horse> results, Horse chosen) {
@@ -76,7 +77,6 @@ public class RaceUtils {
                 }
             }
             latch.countDown();
-
         };
         for (int i = 0; i < horses.size(); i++) {
             executor.execute(r);
@@ -84,11 +84,13 @@ public class RaceUtils {
     }
 
     public static List<RaceList> getRace(int id) {
-        List<RaceList> list = new ArrayList<>();
-        list = raceListDao.getRaceInfo(id);
-
+        List<RaceList> list = raceListDao.getRaceInfo(id);
         return list;
     }
 
-
+    public static ProfileInfo getStats() {
+        int races = raceDao.getRaceCount();
+        int winRate = raceListDao.getWinRate();
+        return new ProfileInfo(races, winRate);
+    }
 }

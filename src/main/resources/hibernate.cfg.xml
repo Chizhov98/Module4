@@ -5,11 +5,9 @@
     <session-factory>
         <!-- JDBC Database connection settings -->
         <property name="connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.url">
-            jdbc:postgresql://ec2-34-197-105-186.compute-1.amazonaws.com:5432/ddcru82ogn27kp
-        </property>
-        <property name="connection.username">ywcdfaojrjqqpq</property>
-        <property name="connection.password">475403ca4d13a6b7bca23448ae96c8d0c6807368c32db03b31c49614263ba3df</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://ec2-18-215-44-132.compute-1.amazonaws.com:5432/d540n08h53g3gf</property>
+        <property name="connection.username">asppmzraugjhyg</property>
+        <property name="connection.password">28e2af011cbf69a2e719d267090200f0d46518794b7eb8c994e5b5a155166b61</property>
 
         <!-- JDBC connection pool settings ... using built-in test pool -->
         <property name="connection.pool_size">5</property>

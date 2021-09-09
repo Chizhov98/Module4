@@ -1,20 +1,19 @@
 package dao;
 
-import entity.Horse;
 import entity.RaceList;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import utils.HibernateUtils;
+import utils.HibernateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RaceListDao extends DefaultDao {
 
-    public void delete(int id){
+    public void delete(int id) {
         Transaction transaction = null;
-        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
             RaceList raceList = session.get(RaceList.class, id);
@@ -33,7 +32,7 @@ public class RaceListDao extends DefaultDao {
     public RaceList read(int id) {
         RaceList raceList = null;
         Transaction transaction = null;
-        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
 
             raceList = session.get(RaceList.class, id);
@@ -46,10 +45,11 @@ public class RaceListDao extends DefaultDao {
         }
         return raceList;
     }
-    public List<RaceList> getRaceInfo(int raceId){
+
+    public List<RaceList> getRaceInfo(int raceId) {
         List<RaceList> list = new ArrayList<>();
         Transaction transaction = null;
-        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             String hql = "FROM RaceList WHERE race = :id ORDER BY position";
             Query query = session.createQuery(hql);
@@ -63,5 +63,24 @@ public class RaceListDao extends DefaultDao {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public int getWinRate() {
+        Transaction transaction = null;
+        int count = 0;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            String hql = "SELECT COUNT(id) FROM RaceList WHERE isChosen=:bool";
+            Query query = session.createQuery(hql);
+            query.setParameter("isChosen", true);
+            count = (int) query.list().get(0);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+        return count;
     }
 }

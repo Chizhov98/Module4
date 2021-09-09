@@ -17,7 +17,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>RaceStartServlet</servlet-name>
-        <url-pattern>/race/start</url-pattern>
+        <url-pattern>/race/start/{id}</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>StatsServlet</servlet-name>

@@ -1,6 +1,20 @@
 package servlets;
 
+import utils.RaceUtils;
+
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class RaceStartServlet extends HttpServlet {
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String path = req.getPathInfo();
+        String teg;
+        int id = Integer.parseInt(path.substring(12));
+        if (RaceUtils.startNewRace(id)) resp.setStatus(200);
+        else resp.setStatus(400);
+    }
 }
+
