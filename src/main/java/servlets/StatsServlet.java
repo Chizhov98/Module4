@@ -16,7 +16,7 @@ public class StatsServlet extends HttpServlet {
         PrintWriter responseBody = resp.getWriter();
         ProfileInfo profile = RaceUtils.getStats();
         resp.setContentType("application/json");
-        var body = new Gson().toJson(profile);
+        String body = new Gson().toJson(profile);
         responseBody.println(body);
         resp.setStatus(200);
     }

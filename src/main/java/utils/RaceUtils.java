@@ -30,14 +30,14 @@ public class RaceUtils {
     private static final int MIN_SLEEP_TIME = 400;
     private static final int SLEEP_RANGE = 100;
 
-    public static boolean startNewRace(int chosenHorseId) {
+    public static boolean startNewRace(int chosenHorseId) throws InterruptedException {
         Horse chosenHorse = horseDao.read(chosenHorseId);
         Race race = new Race();
         race.setDate(LocalDate.now());
         List<Horse> horseList = horseDao.readAll();
         horseCount = horseList.size();
         List<Horse> results = new ArrayList<>();
-        startHorseRun(horseList, results);
+        results = startHorseRun(horseList, results);
         raceDao.create(race);
         saveRunData(race, results, chosenHorse);
         return true;
@@ -56,7 +56,7 @@ public class RaceUtils {
         }
     }
 
-    private static void startHorseRun(List<Horse> horses, List<Horse> results) {
+    private static  List<Horse> startHorseRun(List<Horse> horses, List<Horse> results) throws InterruptedException {
         ExecutorService executor = Executors.newCachedThreadPool();
         CountDownLatch latch = new CountDownLatch(horses.size());
         Runnable r = () -> {
@@ -81,6 +81,10 @@ public class RaceUtils {
         for (int i = 0; i < horses.size(); i++) {
             executor.execute(r);
         }
+        while (results.size()!=horses.size()) {
+            Thread.sleep(SLEEP_RANGE);
+        }
+        return results;
     }
 
     public static List<RaceList> getRace(int id) {

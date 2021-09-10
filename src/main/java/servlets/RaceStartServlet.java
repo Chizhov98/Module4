@@ -1,5 +1,6 @@
 package servlets;
 
+import lombok.SneakyThrows;
 import utils.RaceUtils;
 
 import javax.servlet.http.HttpServlet;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class RaceStartServlet extends HttpServlet {
+    @SneakyThrows
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String path = req.getPathInfo();

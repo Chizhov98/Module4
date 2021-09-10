@@ -18,10 +18,11 @@ public class RaceList {
     @Column(name = "horse_position")
     private int position;
 
-    @Column(name = "horse_Id")
+    @ManyToOne()
+    @JoinColumn(name="horse_Id", nullable=false)
     private Horse horse;
-
-    @Column(name = "race_id")
+    @ManyToOne()
+    @JoinColumn(name="race_id", nullable=false)
     private Race race;
 
     @Column(name = "is_chosen")
