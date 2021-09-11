@@ -100,4 +100,7 @@ public class RaceUtils {
         int winRate = raceListDao.getWinRate();
         return new ProfileInfo(races, winRate);
     }
+    public static int[] getAllHorsesId(){
+        return horseDao.readAll().stream().mapToInt(Horse::getId).toArray();
+    }
 }

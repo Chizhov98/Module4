@@ -19,4 +19,12 @@
         <servlet-name>StatsServlet</servlet-name>
         <url-pattern>/stats</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>StartRunServlet</servlet-name>
+        <servlet-class>servlets.StartRunServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StartRunServlet</servlet-name>
+        <url-pattern>/start/*</url-pattern>
+    </servlet-mapping>
 </web-app>

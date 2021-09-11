@@ -40,6 +40,10 @@ public class RaceServlet extends HttpServlet {
             }
         } else if (path.matches("/start/\\d+")) {
             doPost(req, resp);
+        } else if (path.matches("/start+")) {
+            startPage(req, resp);
+        } else {
+            resp.setStatus(404);
         }
     }
 
@@ -50,5 +54,17 @@ public class RaceServlet extends HttpServlet {
         int id = Integer.parseInt(path.substring(7));
         if (RaceUtils.startNewRace(id)) resp.setStatus(200);
         else resp.setStatus(400);
+    }
+
+    @SneakyThrows
+    protected void startPage(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        PrintWriter responseBody = resp.getWriter();
+        int[] horsesId = RaceUtils.getAllHorsesId();
+        resp.setContentType("text/html");
+        responseBody.println("<h3>Chose your horse to start: </h3>\n");
+        for (int i : horsesId) {
+            responseBody.print("<button ><a href=\"http://localhost:8008/race/start/" + i + "\">Horse " + i + "</a></button>\n");
+        }
+        resp.setStatus(200);
     }
 }
