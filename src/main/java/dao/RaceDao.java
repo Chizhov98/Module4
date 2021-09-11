@@ -1,36 +1,21 @@
 package dao;
 
+import entity.Horse;
 import entity.Race;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import utils.HibernateUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RaceDao extends DefaultDao {
-    public void delete(int id) {
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-
-            Race race = session.get(Race.class, id);
-            if (race != null) {
-                session.delete(race);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
-
     public Race read(int id) {
         Race race = null;
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-
             race = session.get(Race.class, id);
             transaction.commit();
         } catch (Exception e) {
@@ -42,14 +27,14 @@ public class RaceDao extends DefaultDao {
         return race;
     }
 
-    public int getRaceCount() {
+    public List<Race> readAll() {
+        List<Race> races = new ArrayList<>();
         Transaction transaction = null;
-        int count = 0;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            String hql = "SELECT COUNT(id) FROM Race";
+            String hql = "FROM Race";
             Query query = session.createQuery(hql);
-            count = (int) query.list().get(0);
+            races = query.list();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -57,7 +42,11 @@ public class RaceDao extends DefaultDao {
             }
             e.printStackTrace();
         }
-        return count;
+        return races;
     }
 
+    public int getRaceCount() {
+        List<Race> races = readAll();
+        return races != null ? races.size() : 0;
+    }
 }

@@ -4,18 +4,16 @@ import dao.HorseDao;
 import dao.RaceDao;
 import dao.RaceListDao;
 import entity.Horse;
-import entity.ProfileInfo;
+import tdo.ProfileInfo;
 import entity.Race;
 import entity.RaceList;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class RaceUtils {
     private static final HorseDao horseDao = new HorseDao();
@@ -56,7 +54,7 @@ public class RaceUtils {
         }
     }
 
-    private static  List<Horse> startHorseRun(List<Horse> horses, List<Horse> results) throws InterruptedException {
+    private static List<Horse> startHorseRun(List<Horse> horses, List<Horse> results) throws InterruptedException {
         ExecutorService executor = Executors.newCachedThreadPool();
         CountDownLatch latch = new CountDownLatch(horses.size());
         Runnable r = () -> {
@@ -81,15 +79,20 @@ public class RaceUtils {
         for (int i = 0; i < horses.size(); i++) {
             executor.execute(r);
         }
-        while (results.size()!=horses.size()) {
+        while (results.size() != horses.size()) {
             Thread.sleep(SLEEP_RANGE);
         }
         return results;
     }
 
-    public static List<RaceList> getRace(int id) {
-        List<RaceList> list = raceListDao.getRaceInfo(id);
+    public static List<RaceList> getRaceInfo(int id) {
+        List<RaceList> list = raceListDao.getRaceInfo(getRace(id));
+        list.sort(Comparator.comparingInt(RaceList::getPosition));
         return list;
+    }
+
+    public static Race getRace(int id) {
+        return raceDao.read(id);
     }
 
     public static ProfileInfo getStats() {

@@ -19,7 +19,6 @@ public abstract class DefaultDao {
             e.printStackTrace();
         }
     }
-
     public <T> void update(T entity) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {

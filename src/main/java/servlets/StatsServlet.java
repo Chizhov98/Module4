@@ -1,7 +1,7 @@
 package servlets;
 
 import com.google.gson.Gson;
-import entity.ProfileInfo;
+import tdo.ProfileInfo;
 import utils.RaceUtils;
 
 import javax.servlet.http.HttpServlet;

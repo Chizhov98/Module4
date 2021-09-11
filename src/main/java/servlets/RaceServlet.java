@@ -1,8 +1,7 @@
 package servlets;
 
-import com.google.gson.Gson;
-import entity.Race;
 import entity.RaceList;
+import lombok.SneakyThrows;
 import utils.RaceUtils;
 
 import javax.servlet.http.HttpServlet;
@@ -20,12 +19,13 @@ public class RaceServlet extends HttpServlet {
         String teg;
         if (path.matches("/\\d+")) {
             int id = Integer.parseInt(path.substring(1));
-            List<RaceList> race = RaceUtils.getRace(id);
+            List<RaceList> race = RaceUtils.getRaceInfo(id);
             if (race == null) {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND);
             } else {
                 resp.setContentType("text/html");
-                responseBody.println("<table><tr><th>Position</th>" +
+                responseBody.println("<h1>Id:" + id + "</h1><h2>Date:" + RaceUtils.getRace(id).getDate() + "</h2>");
+                responseBody.println("<table border=\"1\"><tr><th>Position</th>" +
                         "<th>Horse_id</th></tr>");
                 for (RaceList list : race) {
                     if (list.isChosen()) {
@@ -38,6 +38,17 @@ public class RaceServlet extends HttpServlet {
                 responseBody.println("<table>");
                 resp.setStatus(200);
             }
+        } else if (path.matches("/start/\\d+")) {
+            doPost(req, resp);
         }
+    }
+
+    @SneakyThrows
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String path = req.getPathInfo();
+        int id = Integer.parseInt(path.substring(7));
+        if (RaceUtils.startNewRace(id)) resp.setStatus(200);
+        else resp.setStatus(400);
     }
 }

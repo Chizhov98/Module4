@@ -9,15 +9,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>RaceServlet</servlet-name>
-        <url-pattern>/race/{id}</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>RaceStartServlet</servlet-name>
-        <servlet-class>servlets.RaceStartServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>RaceStartServlet</servlet-name>
-        <url-pattern>/race/start/{id}</url-pattern>
+        <url-pattern>/race/*</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>StatsServlet</servlet-name>

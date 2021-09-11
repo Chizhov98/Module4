@@ -10,23 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HorseDao extends DefaultDao {
-    public void delete(int id) {
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-
-            Horse horse = session.get(Horse.class, id);
-            if (horse != null) {
-                session.delete(horse);
-            }
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-        }
-    }
 
     public Horse read(int id) {
         Horse horse = null;
@@ -62,5 +45,4 @@ public class HorseDao extends DefaultDao {
         }
         return horses;
     }
-
 }
